@@ -13,11 +13,11 @@ a working foundation from the last, and are sized for an intermediate developer
 - [x] Add a basic health-check route (`GET /api/v1/health`) to confirm the server boots and connects to the DB.
 
 ## 2. Authentication
-- [ ] Implement `POST /api/v1/auth/register`: validate email/password, hash password with bcrypt, create `User`.
-- [ ] Implement `POST /api/v1/auth/login`: verify credentials, issue a signed JWT.
-- [ ] Add Express middleware that reads `Authorization: Bearer <token>`, verifies the JWT, and attaches the user id to the request; reject unauthenticated requests to protected routes.
-- [ ] Add basic input validation and error responses (e.g. duplicate email, wrong password) using a library like `zod` or `express-validator`.
-- [ ] Build the frontend Login/Register forms and store the JWT (e.g. in memory + httpOnly cookie or localStorage) with an auth context/hook.
+- [x] Implement `POST /api/v1/auth/register`: validate email/password, hash password with bcrypt, create `User`.
+- [x] Implement `POST /api/v1/auth/login`: verify credentials, issue a signed JWT.
+- [x] Add Express middleware that reads `Authorization: Bearer <token>`, verifies the JWT, and attaches the user id to the request; reject unauthenticated requests to protected routes.
+- [x] Add basic input validation and error responses (e.g. duplicate email, wrong password) using a library like `zod` or `express-validator`.
+- [x] Build the frontend Login/Register forms and store the JWT (e.g. in memory + httpOnly cookie or localStorage) with an auth context/hook.
 
 ## 3. Daily Log API
 - [ ] Implement `GET /api/v1/logs/today`: return the current user's log for today if one exists, else `null`.
