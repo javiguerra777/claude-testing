@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String
+  createdAt    DateTime      @default(now())
+  logs         DailyLog[]
+  medications  Medication[]
+}
+
+model DailyLog {
+  id          String       @id @default(uuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        DateTime     @default(now())
+  mood        Int?         // Scale of 1-5 (e.g., 1 = Terrible, 5 = Great)
+  energy      Int?         // Scale of 1-5 (e.g., 1 = Depleted, 5 = High)
+  brainFog    Int?         // Scale of 1-5 (e.g., 1 = None, 5 = Severe)
+  notes       String?      // Optional quick thought or context
+  symptoms    SymptomLog[]
+  habits      HabitLog[]
+  medications MedLog[]
+
+  @@unique([userId, date])
+}
+
+model SymptomLog {
+  id         String   @id @default(uuid())
+  logId      String
+  dailyLog   DailyLog @relation(fields: [logId], references: [id], onDelete: Cascade)
+  name       String   // e.g., "Joint Pain", "Headache", "Nausea"
+  severity   Int      // Scale of 1-5
+}
+
+model HabitLog {
+  id       String   @id @default(uuid())
+  logId    String
+  dailyLog DailyLog @relation(fields: [logId], references: [id], onDelete: Cascade)
+  name     String   // e.g., "8 Hours Sleep", "Hydrated", "Stretched"
+  value    Boolean  // Yes/No tracking for simplicity
+}
+
+model Medication {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String   // e.g., "Synthroid"
+  dosage    String   // e.g., "50mcg"
+  frequency String   // e.g., "Once daily"
+  active    Boolean  @default(true)
+  logs      MedLog[]
+}
+
+model MedLog {
+  id           String     @id @default(uuid())
+  logId        String
+  dailyLog     DailyLog   @relation(fields: [logId], references: [id], onDelete: Cascade)
+  medicationId String
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  taken        Boolean    @default(true)
+}
